@@ -1,7 +1,7 @@
 import copy
 import torch
 import torch.nn as nn
-from .linear_attention import LinearAttention
+#from .linear_attention import LinearAttention
 
 
 class LoFTREncoderLayer(nn.Module):
@@ -19,7 +19,9 @@ class LoFTREncoderLayer(nn.Module):
         self.q_proj = nn.Linear(d_model, d_model, bias=False)
         self.k_proj = nn.Linear(d_model, d_model, bias=False)
         self.v_proj = nn.Linear(d_model, d_model, bias=False)
-        self.attention = LinearAttention(self.nhead, self.dim)
+        #self.attention = LinearAttention(self.nhead, self.dim)
+        # Replace Linear Attention with MultiHeadAttention
+        self.attention = nn.MultiHeadAttention(self.dim, self.nhead)
         self.merge = nn.Linear(d_model, d_model, bias=False)
 
         # feed-forward network

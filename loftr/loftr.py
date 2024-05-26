@@ -28,10 +28,13 @@ class LoFTR(nn.Module):
         """
 
         # we assume that data['hw0_i'] == data['hw1_i'] - faster & better BN convergence
-        feats_c, feats_f= self.backbone(torch.cat([img0, img1], dim=0))
+        #feats_c, feats_f= self.backbone(torch.cat([img0, img1], dim=0))
 
-        bs = self.config['input_batch_size']
-        (feat_c0, feat_c1), (feat_f0, feat_f1) = feats_c.split(bs), feats_f.split(bs)
+        #bs = self.config['input_batch_size']
+        #(feat_c0, feat_c1), (feat_f0, feat_f1) = feats_c.split(bs), feats_f.split(bs)
+
+        feat_c0, feat_f0 = self.backbone(img0)
+        feat_c1, feat_f1 = self.backbone(img1)
 
         return feat_c0, feat_f0, feat_c1, feat_f1
 
