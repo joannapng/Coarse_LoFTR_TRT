@@ -35,8 +35,8 @@ def get_view_pairs(file_name, image_files, cams_files, depth_files):
 
 class DataCamera:
     def __init__(self):
-        self.extrinsic = np.zeros((4, 4), dtype=np.float)
-        self.intrinsic = np.zeros((3, 3), dtype=np.float)
+        self.extrinsic = np.zeros((4, 4), dtype=np.float64)
+        self.intrinsic = np.zeros((3, 3), dtype=np.float64)
         self.depth_min = 0
         self.depth_interval = 0
         self.depth_num = 0
@@ -234,7 +234,7 @@ class MVSDataset(Dataset):
             np.all((coordinates2_clipped[:, :2] >= (0, 0)) & (
                     coordinates2_clipped[:, :2] < (original_image_size[1], original_image_size[0])),
                    axis=1))
-        coordinates2_clipped = coordinates2_clipped[mask].astype(np.long)
+        coordinates2_clipped = coordinates2_clipped[mask].astype(np.int_)
         coordinates2 = coordinates2[mask]
         coordinates_2d = coordinates_2d[mask]
         depth2_computed = depth2_computed[mask]
@@ -258,7 +258,7 @@ class MVSDataset(Dataset):
         scale_h = self.image_size[1] / original_image_size[0]
 
         # scale the first image coordinates
-        coordinates1 = coordinates_2d.astype(np.float)
+        coordinates1 = coordinates_2d.astype(np.float64)
         coordinates1[:, :2] *= np.array([scale_w, scale_h])
         coordinates1[:, :2] /= self.resolution
         coordinates1 = np.around(coordinates1)
@@ -283,7 +283,7 @@ class MVSDataset(Dataset):
         coordinates2 = coordinates2[:, 1] * w + coordinates2[:, 0]
 
         conf_matrix = np.zeros((h * w, h * w), dtype=float)
-        conf_matrix[coordinates1.astype(np.long), coordinates2.astype(np.long)] = 1.0
+        conf_matrix[coordinates1.astype(np.int_), coordinates2.astype(np.int_)] = 1.0
 
         return conf_matrix, data_camera1, data_camera2
 

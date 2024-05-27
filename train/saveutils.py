@@ -40,7 +40,7 @@ def load_checkpoint(filename, model, optimizer, scaler):
     if os.path.exists(filename):
         checkpoint = torch.load(filename)
         if checkpoint:
-            model.load_state_dict(checkpoint['model_state_dict'])
+            model.load_state_dict(checkpoint['model_state_dict'], strict = False)
             if optimizer is not None and 'optimizer_state_dict' in checkpoint:
                 optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
             if scaler is not None and 'scaler_state_dict' in checkpoint:

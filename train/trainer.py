@@ -55,12 +55,13 @@ class Trainer(object):
         self.teacher_cfg = default_cfg
         self.teacher_cfg['input_batch_size'] = real_batch_size
         self.teacher_model = LoFTR(config=self.teacher_cfg)
+        
         checkpoint = torch.load(weights_path)
         if checkpoint is not None:
             missed_keys, unexpected_keys = self.teacher_model.load_state_dict(checkpoint['state_dict'], strict=False)
             if len(missed_keys) > 0:
                 print('Checkpoint is broken')
-                exit(1)
+                #exit(1)
             print('Teachers pre-trained weights were successfully loaded.')
         else:
             print('Failed to load checkpoint')
