@@ -21,7 +21,7 @@ class LoFTREncoderLayer(nn.Module):
         self.v_proj = nn.Linear(d_model, d_model, bias=False)
         #self.attention = LinearAttention(self.nhead, self.dim)
         # Replace Linear Attention with MultiHeadAttention
-        self.attention = nn.MultiheadAttention(self.dim, self.nhead, batch_first = True)
+        self.attention = nn.MultiheadAttention(d_model, self.nhead, batch_first = True)
         self.merge = nn.Linear(d_model, d_model, bias=False)
 
         # feed-forward network
@@ -44,9 +44,9 @@ class LoFTREncoderLayer(nn.Module):
         query, key, value = x, source, source
 
         # multi-head attention
-        query = self.q_proj(query).view(self.bs, -1, self.dim)  # [N, L, (H, D)]
-        key = self.k_proj(key).view(self.bs, -1, self.dim)  # [N, S, (H, D)]
-        value = self.v_proj(value).view(self.bs, -1, self.dim)
+        query = self.q_proj(query).view(self.bs, -1, self.dim * self.nhead)  # [N, L, (H, D)]
+        key = self.k_proj(key).view(self.bs, -1, self.dim * self.nhead)  # [N, S, (H, D)]
+        value = self.v_proj(value).view(self.bs, -1, self.dim * self.nhead)
         message, _ = self.attention(query, key, value)   # [N, L, (H, D)]
         message = self.merge(message)  # [N, L, C]
         message = self.norm1(message)

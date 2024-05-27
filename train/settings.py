@@ -2,8 +2,8 @@ class TrainSettings:
     def __init__(self):
         self.cuda = True
 
-        self.batch_size = 1
-        self.batch_size_divider = 1  # Used for gradient accumulation
+        self.batch_size = 32
+        self.batch_size_divider = 8  # Used for gradient accumulation
         self.use_amp = True
         self.epochs = 35
         self.epoch_size = 5000
